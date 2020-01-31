@@ -1,13 +1,13 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-const stdin = process.openStdin();
+var app = require('express')()
+var http = require('http').Server(app)
+var io = require('socket.io')(http)
+const stdin = process.openStdin()
 
 
 io.on('connection', function (socket: any){
     let score = 0
     let text = ''
-    console.log('connection');
+    console.log('connection')
     stdin.addListener("data", function(d) {
         console.log("you entered: " + d)
         socket.emit("message",d.toString().trim())
@@ -17,7 +17,7 @@ io.on('connection', function (socket: any){
 
     socket.on('message', function (msg: any) {
 
-        console.log('Client Sent: ' +  msg);
+        console.log('Client Sent: ' +  msg)
         if (msg === text) {
             score = score + 1
             socket.emit("score", score)
@@ -45,5 +45,5 @@ io.on('connection', function (socket: any){
 });
 
 http.listen(3000, function () {
-  console.log('listening on *:3000');
+  console.log('listening on *:3000')
 });
