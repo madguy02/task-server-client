@@ -3,12 +3,11 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 const stdin = process.openStdin();
 
-let text = ''
-let score = 0
 
 io.on('connection', function (socket: any){
-
-   console.log('connection');
+    let score = 0
+    let text = ''
+    console.log('connection');
     stdin.addListener("data", function(d) {
         console.log("you entered: " + d)
         socket.emit("message",d.toString().trim())
@@ -16,8 +15,7 @@ io.on('connection', function (socket: any){
         stdin.removeAllListeners("data")
     })
 
-  socket.on('message', function (msg: any) {
-
+    socket.on('message', function (msg: any) {
 
         console.log('Client Sent: ' +  msg);
         if (msg === text) {
