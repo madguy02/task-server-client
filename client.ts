@@ -8,31 +8,41 @@ const stdin = process.openStdin();
 const ioC = require("socket.io-client")
 
 console.log("verifier  has connected");
-const ioClient = ioC.connect('http://localhost:3001')
+const ioClient = io.connect('http://localhost:3001')
 let states: any = []
 
-ioClient.on("message", (msg: any) => {
-    console.log("You have received: " + msg)
-    let count  = 0
-    let timer = new Timer()
-    timer.on('done', () => {
-        console.log('time up!!')
-        count ++
-        if (states.length == 3) {
-            process.exit(22)
-        }
-        else {
-            io.emit("message","score not evaluated")
-            states.push(count)
+// ioClient.on("message", (msg: any) => {
+//     console.log("You have received: " + msg)
+//     let count  = 0
+//     let timer = new Timer()
+//     timer.on('done', () => {
+//         console.log('time up!!')
+//         count ++
+//         if (states.length == 3) {
+//             process.exit(22)
+//         }
+//         else {
+//             io.emit("message","score not evaluated")
+//             states.push(count)
 
-        }
-    })
-    timer.start(5000)
-    stdin.addListener("data", function(d) {
-            timer.stop()
-            io.emit("message", d)
-            stdin.removeAllListeners("data")
-    })
-})
+//         }
+//     })
+//     timer.start(5000)
+//     stdin.addListener("data", function(d) {
+//             timer.stop()
+//             io.emit("message", d)
+//             stdin.removeAllListeners("data")
+//     })
+// })
 
-io.listen(3000)
+// io.listen(3000)
+
+
+    ioClient.on("message", (msg: any, socket: any) => {
+        console.log(msg)
+        stdin.addListener("data", function(d) {
+            ioClient.emit("message", d)
+        })
+    })
+
+
